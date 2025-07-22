@@ -48,7 +48,7 @@ export class CardService {
     cardId: number,
     fromColumnId: number,
     toColumnId: number,
-  ): Promise<Card | {message: string}> {
+  ): Promise<Card | { message: string }> {
     let card = await this.cardRepository.findOne({
       where: { id: cardId },
       relations: ['column'],
@@ -59,12 +59,22 @@ export class CardService {
       card.column.id = toColumnId;
       await this.cardRepository.save(card);
     }
-    
+
     if (card.column.id !== fromColumnId) {
       return { message: 'Card não pode ser movido para a coluna especificada' };
     }
     return card;
-    }
-   
-    
   }
+
+  async update(
+    id: number,
+    updateCardDto: Partial<CreateCardDto>,
+  ): Promise<Card> {
+    const card = await this.cardRepository.findOneBy({ id });
+    if (!card) {
+      throw new NotFoundException('Card not found');
+    }
+    Object.assign(card, updateCardDto);
+    return this.cardRepository.save(card);
+  }
+}

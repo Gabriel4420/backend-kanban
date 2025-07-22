@@ -1,6 +1,4 @@
-// src/column/column.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Card } from '../card/card.entity';
 import { KanbanColumn } from 'src/column/column.entity';
 
 @Entity()
@@ -15,4 +13,3 @@ export class KanbanBoard {
   columns: KanbanColumn[];
 }
 export { KanbanBoard as Column }; // Exportando como Column para manter a consistência com o resto do código
-
