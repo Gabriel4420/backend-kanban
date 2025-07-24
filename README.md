@@ -16,7 +16,7 @@ API RESTful desenvolvida com NestJS e TypeORM para gerenciamento de quadros Kanb
 ## Instalação
 
 ```sh
-git clone <url-do-repositorio>
+git clone https://github.com/Gabriel4420/backend-kanban
 cd backend-kanban
 npm install
 npm run start
