@@ -1,12 +1,15 @@
-// src/column/dto/create-column.dto.ts
-import { IsString, IsNotEmpty, IsInt } from 'class-validator';
+// create-column.dto.ts
+import { IsString, IsOptional, IsNotEmpty } from 'class-validator';
 
 export class CreateColumnDto {
   @IsString()
   @IsNotEmpty()
-  name: string;
+  title: string;
 
-  @IsInt()
+  @IsString()
+  @IsOptional()
+  description?: string;
+
   @IsNotEmpty()
-  boardId: number;
+  boardId: number; // Relacionamento com o board
 }

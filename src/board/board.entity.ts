@@ -1,15 +1,23 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { KanbanColumn } from 'src/column/column.entity';
+// board.entity.ts
+import { Column } from '../column/column.entity';
+import {
+  Entity,
+  Column as ORMColumn,
+  PrimaryGeneratedColumn,
+  OneToMany,
+} from 'typeorm';
 
 @Entity()
-export class KanbanBoard {
+export class Board {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  name: string;
+  @ORMColumn()
+  title: string;
 
-  @OneToMany(() => KanbanColumn, (board) => board.board)
-  columns: KanbanColumn[];
+  @ORMColumn()
+  description: string;
+
+  @OneToMany(() => Column, (column) => column.board)
+  columns: Column[];
 }
-export { KanbanBoard as Column }; // Exportando como Column para manter a consistência com o resto do código

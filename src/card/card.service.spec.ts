@@ -1,16 +1,33 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CardService } from './card.service';
-import { Column } from 'typeorm';
+import { Column, Repository } from 'typeorm';
+import { Card } from './card.entity';
+import { getRepositoryToken } from '@nestjs/typeorm';
 
 describe('CardService', () => {
   let service: CardService;
 
+  let repo: Repository<Card>;
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [CardService],
+      providers: [
+        CardService,
+        {
+          provide: getRepositoryToken(Card),
+          useValue: {
+            find: jest.fn().mockResolvedValue([]),
+            findOneBy: jest.fn().mockResolvedValue(null),
+            create: jest.fn().mockImplementation((dto) => dto),
+            save: jest.fn().mockImplementation((card) => ({ id: 1, ...card })),
+            remove: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     service = module.get<CardService>(CardService);
+    repo = module.get<Repository<Card>>(getRepositoryToken(Card));
   });
 
   it('should be defined', () => {
@@ -29,6 +46,7 @@ describe('CardService', () => {
       columnId: 1,
     };
     const createdCard = await service.create(newCard);
+
     expect(createdCard).toHaveProperty('id');
     expect(createdCard.title).toBe(newCard.title);
   });

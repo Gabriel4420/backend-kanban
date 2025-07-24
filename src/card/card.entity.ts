@@ -1,19 +1,29 @@
-// src/card/card.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { KanbanColumn } from '../column/column.entity';
+// card.entity.ts
+import { Column } from 'src/column/column.entity';
+import {
+  Entity,
+  Column as ORMColumn,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+} from 'typeorm';
 
 @Entity()
 export class Card {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @ORMColumn()
   title: string;
 
-  @Column()
+  @ORMColumn()
   description: string;
 
-  // A coluna aqui é uma instância de KanbanColumn, e não apenas o ID
-  @ManyToOne(() => KanbanColumn, (column:any) => column.cards, { eager: true })
-  column: KanbanColumn; // A associação é feita com a instância de Column
+  @ORMColumn({ type: 'boolean', default: false })
+  isCompleted: boolean;
+
+  @ManyToOne(() => Column, (column) => column.cards)
+  column: Column;
+
+  @ORMColumn()
+  columnId: number; // Foreign key to Column entity
 }

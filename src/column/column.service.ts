@@ -2,7 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { KanbanColumn as Column } from './column.entity';
+import { Column } from './column.entity';
 import { CreateColumnDto } from './dto/create-column.dto';
 
 @Injectable()

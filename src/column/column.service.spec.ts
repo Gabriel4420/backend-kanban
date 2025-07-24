@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ColumnService } from './column.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { KanbanColumn } from './column.entity';
+import { Column as KanbanColumn } from './column.entity';
 import { Repository } from 'typeorm';
 
 describe('ColumnService', () => {
@@ -43,14 +43,18 @@ describe('ColumnService', () => {
   });
 
   it('should create a new column', async () => {
-    const newColumn = { name: 'Test Column', boardId: 1 };
+    const newColumn = { title: 'Test Column', description: 'x', boardId: 1 };
     const createdColumn = await service.create(newColumn);
     expect(createdColumn).toHaveProperty('id');
-    expect(createdColumn.name).toBe(newColumn.name);
+    expect(createdColumn.title).toBe(newColumn.title);
   });
 
   it('should find a column by id', async () => {
-    const newColumn = await service.create({ name: 'Find Column', boardId: 1 });
+    const newColumn = await service.create({
+      title: 'Test Column',
+      description: 'x',
+      boardId: 1,
+    });
     jest.spyOn(repo, 'findOneBy').mockResolvedValue(newColumn);
     const foundColumn = await service.findOne(newColumn.id);
     expect(foundColumn).toHaveProperty('id', newColumn.id);
@@ -58,24 +62,24 @@ describe('ColumnService', () => {
 
   it('should update a column', async () => {
     const newColumn = await service.create({
-      name: 'Update Column',
+      title: 'Update Column',
       boardId: 1,
     });
     jest.spyOn(repo, 'findOneBy').mockResolvedValue(newColumn);
     jest.spyOn(repo, 'save').mockResolvedValue({
       ...newColumn,
-      name: 'Updated Name',
+      title: 'Updated Name',
     });
     const updatedColumn = await service.update(newColumn.id, {
-      name: 'Updated Name',
+      title: 'Updated Name',
       boardId: 1,
     });
-    expect(updatedColumn.name).toBe('Updated Name');
+    expect(updatedColumn.title).toBe('Updated Name');
   });
 
   it('should delete a column', async () => {
     const newColumn = await service.create({
-      name: 'Delete Column',
+      title: 'Delete Column',
       boardId: 1,
     });
     jest.spyOn(repo, 'findOneBy').mockResolvedValue(newColumn);
@@ -87,7 +91,7 @@ describe('ColumnService', () => {
 
   it('should throw an error when trying to update a non-existing column', async () => {
     await expect(
-      service.update(999, { name: 'Non-existing Column', boardId: 1 }),
+      service.update(999, { title: 'Non-existing Column', boardId: 1 }),
     ).rejects.toThrow();
   });
 });

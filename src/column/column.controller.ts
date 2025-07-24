@@ -1,5 +1,13 @@
 // src/column/column.controller.ts
-import { Controller, Get, Post, Body, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Delete,
+  Param,
+} from '@nestjs/common';
 import { ColumnService } from './column.service';
 import { CreateColumnDto } from './dto/create-column.dto';
 
@@ -22,12 +30,12 @@ export class ColumnController {
   }
 
   @Put('editColumn/:id')
-  update(@Body() createColumnDto: CreateColumnDto, id: number) {
+  update(@Body() createColumnDto: CreateColumnDto, @Param('id') id: number) {
     return this.columnService.update(id, createColumnDto);
   }
 
   @Delete('removeColumn/:id')
-  remove(id: number) {
+  remove(@Param('id') id: number) {
     return this.columnService.remove(id);
-  } 
+  }
 }

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BoardService } from './board.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { KanbanBoard } from './board.entity';
+import { Board as KanbanBoard } from './board.entity';
 import { Repository } from 'typeorm';
 
 describe('ColumnService', () => {
@@ -41,14 +41,17 @@ describe('ColumnService', () => {
   });
 
   it('Deve criar um novo board', async () => {
-    const newBoard = { name: 'Test Board' };
+    const newBoard = { title: 'Test Board', description: 'Test Description' };
     const createdBoard = await service.create(newBoard);
     expect(createdBoard).toHaveProperty('id');
-    expect(createdBoard.name).toBe(newBoard.name);
+    expect(createdBoard.title).toBe(newBoard.title);
   });
 
   it('Deve achar um board pelo id', async () => {
-    const newBoard = await service.create({ name: 'Find Board' });
+    const newBoard = await service.create({
+      title: 'Test Board',
+      description: 'Test Description',
+    });
     jest.spyOn(repo, 'findOneBy').mockResolvedValue(newBoard);
 
     const foundBoard = await service.findOne(newBoard.id);
@@ -57,16 +60,23 @@ describe('ColumnService', () => {
   });
 
   it('Deve atualizar um board', async () => {
-    const newBoard = await service.create({ name: 'Update Board' });
+    const newBoard = await service.create({
+      title: 'Update Board',
+      description: 'Update Description',
+    });
     jest.spyOn(repo, 'findOneBy').mockResolvedValue(newBoard);
     const updatedBoard = await service.update(newBoard.id, {
-      name: 'Updated Name',
+      title: 'Updated Name',
+      description: 'Updated Description',
     });
-    expect(updatedBoard.name).toBe('Updated Name');
+    expect(updatedBoard.title).toBe('Updated Name');
   });
 
   it('deve remover um board', async () => {
-    const newBoard = await service.create({ name: 'Delete Board' });
+    const newBoard = await service.create({
+      title: 'Test Board',
+      description: 'Test Description',
+    });
     jest.spyOn(repo, 'findOneBy').mockResolvedValue(newBoard);
     jest.spyOn(repo, 'remove').mockResolvedValue(newBoard);
     await service.remove(newBoard.id);
